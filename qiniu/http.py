@@ -141,6 +141,20 @@ def _post_with_qiniu_mac(url, data, auth):
         return None, ResponseInfo(None, e)
     return __return_wrapper(r)
 
+def _patch_with_qiniu_mac(url, data, auth):
+    qn_auth = qiniu.auth.QiniuMacRequestsAuth(
+        auth) if auth is not None else None
+    timeout = config.get_default('connection_timeout')
+    try:
+        r = requests.patch(
+            url,
+            json=data,
+            auth=qn_auth,
+            timeout=timeout,
+            headers=_headers)
+    except Exception as e:
+        return None, ResponseInfo(None, e)
+    return __return_wrapper(r)
 
 def _put_with_qiniu_mac(url, data, auth):
     qn_auth = qiniu.auth.QiniuMacRequestsAuth(
