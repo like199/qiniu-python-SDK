@@ -487,6 +487,8 @@ def build_batch_rename(bucket, key_pairs, force='false'):
 def build_batch_move(source_bucket, key_pairs, target_bucket, force='false'):
     return _two_key_batch('move', source_bucket, key_pairs, target_bucket, force)
 
+def build_batch_restoreAr(bucket, keys):
+    return _three_key_batch('restoreAr', bucket, keys)
 
 def build_batch_delete(bucket, keys):
     return _one_key_batch('delete', bucket, keys)
@@ -505,3 +507,8 @@ def _two_key_batch(operation, source_bucket, key_pairs, target_bucket, force='fa
         target_bucket = source_bucket
     return [_build_op(operation, entry(source_bucket, k), entry(target_bucket, v), 'force/{0}'.format(force)) for k, v
             in key_pairs.items()]
+
+def _three_key_batch(operation, bucket, keys):
+    return [_build_op(operation, entry(bucket, k), f'freezeAfterDays/{v}') for k, v
+            in keys.items()]
+
