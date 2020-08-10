@@ -197,7 +197,9 @@ class BucketManager(object):
             key:    目标资源文件名
 
         Returns:
-            一个dict变量，成功返回NULL，失败返回{"error": "<errMsg string>"}
+            一个dict变量：
+                成功 返回{'fsize': <fsize int>, 'hash': <hash string>, 'key': <key string>, 'mimeType': <mimeType string>}
+                失败 返回 None
             一个ResponseInfo对象
         """
         resource = urlsafe_base64_encode(url)
