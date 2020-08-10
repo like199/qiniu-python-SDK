@@ -261,11 +261,14 @@ class ResponseInfo(object):
             self.req_id = response.headers.get('X-Reqid')
             self.x_log = response.headers.get('X-Log')
             if self.status_code >= 400:
-                ret = response.json() if response.text != '' else None
-                if ret is None or ret['error'] is None:
-                    self.error = 'unknown'
+                if 600 > self.status_code >= 499:
+                    self.error = response.text
                 else:
-                    self.error = ret['error']
+                    ret = response.json() if response.text != '' else None
+                    if ret is None or ret['error'] is None:
+                        self.error = 'unknown'
+                    else:
+                        self.error = ret['error']
             if self.req_id is None and self.status_code == 200:
                 self.error = 'server is not qiniu'
 
